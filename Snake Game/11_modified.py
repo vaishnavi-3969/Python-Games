@@ -7,12 +7,24 @@ width = 500
 height = 500
 delay = 100  # milliseconds
 food_size = 10
+speed = 1
+speed_increase_factor = 0.1
+high_score = 0
 
 offsets = {
     "up": (0, 20),
     "down": (0, -20),
     "left": (-20, 1),
     "right": (20, 0)
+}
+
+colors = {
+    "red": "#ff7f7f",
+    "orange": "#ffb347",
+    "yellow": "#ffff99",
+    "green": "#90ee90",
+    "blue": "#87cefa",
+    "purple": "#d3d3e3"
 }
 
 
@@ -25,10 +37,12 @@ def move_turtle():
 
 
 def food_collision():
-    global food_pos, score
+    global food_pos, score, speed
     if get_distance(snake[-1], food_pos) < 20:
         score += 1
+        speed += speed_increase_factor
         food_pos = get_random_food_pos()
+        food.color(random.choice(list(colors.values())))
         food.goto(food_pos)
         return True
     return False
@@ -64,7 +78,7 @@ def game_loop():
 
         # check food collision
         if not food_collision():
-            snake.pop(0)  # keep snake the same lenght
+            snake.pop(0)  # keep snake the same length
 
         for segment in snake:
             stamper.goto(segment[0], segment[1])
